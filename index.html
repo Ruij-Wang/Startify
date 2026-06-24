@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f2ec">
+  <title>Startify</title>
+  <link rel="stylesheet" href="./frontend/styles.css">
+</head>
+<body>
+  <div class="ambient ambient-left"></div>
+  <div class="ambient ambient-right"></div>
+
+  <main class="app-frame">
+    <section class="app-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">Startify</p>
+          <h1 class="app-title">先启动，再进入状态。</h1>
+        </div>
+        <div class="header-side">
+          <span class="status-pill" id="health-pill">检测中</span>
+          <button class="ghost-btn" id="refresh-app" type="button">刷新</button>
+        </div>
+      </header>
+
+      <section class="hero-strip">
+        <div>
+          <p class="hero-label">今天</p>
+          <p class="hero-copy">把一个让人有压力的大任务，先变成此刻就能开始的小动作。</p>
+        </div>
+        <div class="hero-metrics">
+          <div class="hero-metric">
+            <strong id="today-started">0</strong>
+            <span>已开始</span>
+          </div>
+          <div class="hero-metric">
+            <strong id="today-completed">0</strong>
+            <span>已完成</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="api-tip" id="api-tip"></div>
+
+      <section class="screen-stack">
+        <section class="screen active" data-screen="player">
+          <div class="screen-head">
+            <div>
+              <p class="eyebrow">播放器</p>
+              <h2>当前任务</h2>
+            </div>
+            <button class="icon-btn" id="favorite-current" type="button" aria-label="收藏当前任务">收藏</button>
+          </div>
+
+          <article class="card task-focus">
+            <div class="card-top">
+              <div>
+                <p class="micro-label" id="current-category">学习</p>
+                <h3 id="current-title">正在准备任务</h3>
+              </div>
+              <span class="chip" id="prepare-chip">无需准备</span>
+            </div>
+
+            <p class="body-copy" id="current-summary">后端在线时会同步接口数据，前端单独运行时也能直接使用本地模式。</p>
+
+            <div class="meta-row">
+              <div class="meta-box">
+                <strong id="current-duration">2 分钟</strong>
+                <span>时长</span>
+              </div>
+              <div class="meta-box">
+                <strong id="current-energy">低能量</strong>
+                <span>能量</span>
+              </div>
+              <div class="meta-box">
+                <strong id="current-state">默认</strong>
+                <span>状态</span>
+              </div>
+            </div>
+
+            <div class="timer-card">
+              <div class="timer-ring">
+                <div class="timer-core">
+                  <strong id="timer-text">02:00</strong>
+                  <span id="timer-caption">待开始</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="action-grid">
+              <button class="main-btn" id="start-toggle" type="button">开始</button>
+              <button class="soft-btn" id="complete-task" type="button">完成</button>
+              <button class="soft-btn" id="skip-task" type="button">跳过</button>
+            </div>
+          </article>
+
+          <article class="card next-card">
+            <div class="screen-head compact">
+              <div>
+                <p class="eyebrow">下一项推荐</p>
+                <h3 id="next-title">准备中</h3>
+              </div>
+              <button class="ghost-btn" id="use-next-task" type="button">切换</button>
+            </div>
+            <p class="body-copy" id="next-summary">完成一个小动作之后，顺手进入下一步。</p>
+            <div class="tag-row" id="next-tags"></div>
+          </article>
+        </section>
+
+        <section class="screen" data-screen="launch">
+          <div class="screen-head">
+            <div>
+              <p class="eyebrow">启动页</p>
+              <h2>你现在是什么状态</h2>
+            </div>
+          </div>
+
+          <div class="state-grid" id="state-grid"></div>
+
+          <article class="card launch-panel">
+            <div class="screen-head compact">
+              <div>
+                <p class="eyebrow">状态推荐</p>
+                <h3 id="launch-state-title">默认推荐</h3>
+              </div>
+              <span class="chip" id="launch-state-chip">default</span>
+            </div>
+
+            <p class="body-copy" id="launch-state-copy">根据你现在的状态，优先给出更容易开始的任务。</p>
+            <div class="recommendation-list" id="recommendation-list"></div>
+          </article>
+        </section>
+
+        <section class="screen" data-screen="list">
+          <div class="screen-head">
+            <div>
+              <p class="eyebrow">清单页</p>
+              <h2>任务清单</h2>
+            </div>
+          </div>
+
+          <label class="search-bar">
+            <span>搜索</span>
+            <input id="task-search" type="text" placeholder="搜索任务标题或标签">
+          </label>
+
+          <div class="filter-row" id="category-filters"></div>
+
+          <div class="task-list" id="task-list"></div>
+        </section>
+
+        <section class="screen" data-screen="create">
+          <div class="screen-head">
+            <div>
+              <p class="eyebrow">添加页</p>
+              <h2>创建一个可立即开始的任务</h2>
+            </div>
+          </div>
+
+          <form class="card form-card" id="create-form">
+            <label class="field">
+              <span>任务标题</span>
+              <input id="title-input" name="title" type="text" placeholder="先打开作业文档 2 分钟" required>
+            </label>
+
+            <div class="field-grid">
+              <label class="field">
+                <span>分类</span>
+                <select id="category-input" name="category">
+                  <option value="study">学习</option>
+                  <option value="work">工作</option>
+                  <option value="life">生活</option>
+                  <option value="health">状态</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>时长</span>
+                <select id="duration-input" name="duration">
+                  <option value="2">2 分钟</option>
+                  <option value="3">3 分钟</option>
+                  <option value="5" selected>5 分钟</option>
+                  <option value="10">10 分钟</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="field-grid">
+              <label class="field">
+                <span>能量等级</span>
+                <select id="energy-input" name="energy">
+                  <option value="1">低</option>
+                  <option value="2">中</option>
+                  <option value="3">高</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>标签</span>
+                <input id="tags-input" name="tags" type="text" placeholder="clear-step, no-prep">
+              </label>
+            </div>
+
+            <div class="field">
+              <span>适配状态</span>
+              <div class="state-pills" id="create-state-pills"></div>
+            </div>
+
+            <div class="ai-box">
+              <div>
+                <p class="eyebrow">AI 拆解</p>
+                <p class="body-copy">把模糊的大任务拆成第一步，先把启动门槛降下来。</p>
+              </div>
+              <div class="ai-controls">
+                <input id="ai-goal-input" type="text" placeholder="例如：写一份创业管理课程报告">
+                <button class="soft-btn block-btn" id="ai-breakdown-btn" type="button">生成第一步</button>
+              </div>
+              <div class="ai-result" id="ai-result"></div>
+            </div>
+
+            <label class="field" aria-label="保存说明">
+              <span>保存说明</span>
+              <small>后端未启动时，任务和记录会保存在当前浏览器的本地存储中。</small>
+            </label>
+
+            <button class="main-btn block-btn" type="submit">保存任务</button>
+          </form>
+        </section>
+      </section>
+    </section>
+
+    <nav class="bottom-nav" aria-label="底部导航">
+      <button class="nav-btn active" data-target="player" type="button">
+        <span>首页</span>
+        <strong>播放器</strong>
+      </button>
+      <button class="nav-btn" data-target="launch" type="button">
+        <span>推荐</span>
+        <strong>启动页</strong>
+      </button>
+      <button class="nav-btn" data-target="list" type="button">
+        <span>任务</span>
+        <strong>清单页</strong>
+      </button>
+      <button class="nav-btn" data-target="create" type="button">
+        <span>新增</span>
+        <strong>添加页</strong>
+      </button>
+    </nav>
+  </main>
+
+  <script src="./frontend/app.js"></script>
+</body>
+</html>
