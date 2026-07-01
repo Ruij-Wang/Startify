@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zhe6327-wq.github.io/Startify/sitemap.xml

@@ -4,8 +4,49 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f6f2ec">
-  <title>Startify</title>
+  <title>Startify | 先启动，再进入状态</title>
+  <meta name="description" content="Startify 是一个本地优先的任务启动助手原型。它会根据你当前的状态推荐一个更容易开始的小动作，并用短计时推动你进入节奏。">
+  <meta name="robots" content="index, follow">
+  <meta name="application-name" content="Startify">
+  <meta name="apple-mobile-web-app-title" content="Startify">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:site_name" content="Startify">
+  <meta property="og:title" content="Startify | 先启动，再进入状态">
+  <meta property="og:description" content="把有压力的大任务，先变成此刻就能开始的小动作。">
+  <meta property="og:url" content="https://zhe6327-wq.github.io/Startify/">
+  <meta property="og:image" content="https://zhe6327-wq.github.io/Startify/social-preview.svg">
+  <meta property="og:image:alt" content="Startify 页面预览，展示先启动再进入状态的任务启动体验">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Startify | 先启动，再进入状态">
+  <meta name="twitter:description" content="根据你当前的状态推荐一个更容易开始的小动作，并用短计时推动你进入节奏。">
+  <meta name="twitter:image" content="https://zhe6327-wq.github.io/Startify/social-preview.svg">
+  <link rel="canonical" href="https://zhe6327-wq.github.io/Startify/">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="./site.webmanifest">
   <link rel="stylesheet" href="./frontend/styles.css">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "Startify",
+      "applicationCategory": "ProductivityApplication",
+      "operatingSystem": "Web",
+      "inLanguage": "zh-CN",
+      "url": "https://zhe6327-wq.github.io/Startify/",
+      "description": "Startify 是一个本地优先的任务启动助手原型。它会根据你当前的状态推荐一个更容易开始的小动作，并用短计时推动你进入节奏。",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "CNY"
+      },
+      "featureList": [
+        "根据当前状态推荐更容易开始的任务",
+        "用短计时推进一个清晰的小动作",
+        "后端不可用时自动切换到本地模式"
+      ]
+    }
+  </script>
 </head>
 <body>
   <div class="ambient ambient-left"></div>
@@ -38,6 +79,17 @@
             <strong id="today-completed">0</strong>
             <span>已完成</span>
           </div>
+        </div>
+      </section>
+
+      <section class="product-strip" aria-label="产品简介">
+        <p class="product-copy">
+          Startify 是一个任务启动助手原型，重点不在完整管理，而在帮你先迈出第一步。
+        </p>
+        <div class="product-pills">
+          <span class="product-pill">状态推荐</span>
+          <span class="product-pill">短时启动</span>
+          <span class="product-pill">本地优先</span>
         </div>
       </section>
 

@@ -1,0 +1,17 @@
+{
+  "name": "Startify",
+  "short_name": "Startify",
+  "description": "一个本地优先的任务启动助手原型，帮助你先迈出第一步。",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f2ec",
+  "theme_color": "#f6f2ec",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

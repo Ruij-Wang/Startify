@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Startify social preview</title>
+  <desc id="desc">Startify social preview card with the line Start first, then find your rhythm.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8f5f1"/>
+      <stop offset="1" stop-color="#f3eee8"/>
+    </linearGradient>
+    <radialGradient id="mistLeft" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(190 110) rotate(38) scale(280 240)">
+      <stop offset="0" stop-color="#c7e6ed" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#c7e6ed" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="mistRight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1000 140) rotate(12) scale(260 220)">
+      <stop offset="0" stop-color="#f4ddd0" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#f4ddd0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="220" y1="130" x2="980" y2="510" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.82"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#5c4f3d" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#mistLeft)"/>
+  <rect width="1200" height="630" fill="url(#mistRight)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="154" y="78" width="892" height="474" rx="42" fill="url(#panel)" stroke="#ffffff" stroke-opacity="0.85"/>
+  </g>
+
+  <text x="226" y="168" fill="#7c746a" font-size="26" font-family="'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif" letter-spacing="8">STARTIFY</text>
+  <text x="226" y="270" fill="#22201c" font-size="72" font-weight="700" font-family="'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif">先启动，再进入状态。</text>
+  <text x="226" y="332" fill="#5e564d" font-size="28" font-family="'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif">把一个让人有压力的大任务，先变成此刻就能开始的小动作。</text>
+
+  <g>
+    <rect x="226" y="388" width="138" height="54" rx="27" fill="#2a2621"/>
+    <text x="295" y="423" text-anchor="middle" fill="#ffffff" font-size="24" font-family="'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif">状态推荐</text>
+
+    <rect x="382" y="388" width="138" height="54" rx="27" fill="#ffffff" stroke="#e9ded4"/>
+    <text x="451" y="423" text-anchor="middle" fill="#7c746a" font-size="24" font-family="'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif">短时启动</text>
+
+    <rect x="538" y="388" width="138" height="54" rx="27" fill="#ffffff" stroke="#e9ded4"/>
+    <text x="607" y="423" text-anchor="middle" fill="#7c746a" font-size="24" font-family="'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif">本地优先</text>
+  </g>
+
+  <g>
+    <rect x="850" y="186" width="130" height="130" rx="65" fill="#ffffff" stroke="#ece3da"/>
+    <circle cx="915" cy="251" r="52" fill="none" stroke="#c7e6ed" stroke-width="14" stroke-dasharray="260 68" transform="rotate(-90 915 251)"/>
+    <text x="915" y="258" text-anchor="middle" fill="#22201c" font-size="30" font-weight="700" font-family="'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif">02:00</text>
+  </g>
+
+  <text x="226" y="500" fill="#7c746a" font-size="22" font-family="'Avenir Next', 'PingFang SC', 'Microsoft YaHei', sans-serif">startify • local-first task starter prototype</text>
+</svg>
