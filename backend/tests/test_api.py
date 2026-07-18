@@ -36,6 +36,7 @@ class StartifyApiTests(unittest.TestCase):
             self.assertEqual(health.status_code, 200)
             self.assertTrue(health.json()["databaseReady"])
             self.assertIn(health.json()["databaseMode"], {"sqlite-file", "sqlite-memory-fallback"})
+            self.assertEqual(health.json()["aiMode"], "mock")
 
             tasks = client.get("/api/tasks")
             self.assertEqual(tasks.status_code, 200)
@@ -46,6 +47,11 @@ class StartifyApiTests(unittest.TestCase):
             payload = recommendations.json()
             self.assertEqual(payload["state"], "anxious")
             self.assertLessEqual(len(payload["tasks"]), 2)
+
+            breakdown = client.post("/api/ai/breakdown", json={"goal": "完成创业管理课程报告"})
+            self.assertEqual(breakdown.status_code, 200)
+            self.assertEqual(breakdown.json()["source"], "mock")
+            self.assertTrue(breakdown.json()["suggestionTitle"])
 
     def test_create_update_and_archive_task(self) -> None:
         with TestClient(self.app) as client:

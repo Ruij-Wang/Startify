@@ -24,6 +24,7 @@ class HealthResponse(APIModel):
     version: str
     database_ready: bool
     database_mode: str
+    ai_mode: Literal["api", "mock"]
 
 
 class TaskBase(APIModel):
@@ -95,9 +96,9 @@ class AIBreakdownRequest(APIModel):
 
 class AIBreakdownResponse(APIModel):
     goal: str
-    suggestion_title: str
-    duration_min: int
-    energy_level: int
+    suggestion_title: str = Field(min_length=1, max_length=200)
+    duration_min: int = Field(ge=1, le=30)
+    energy_level: int = Field(ge=1, le=3)
     reason: str
-    steps: list[str]
+    steps: list[str] = Field(min_length=1, max_length=5)
     source: str

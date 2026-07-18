@@ -1,40 +1,47 @@
 # Startify Backend
 
-这是 Startify 的本地后端原型，基于 FastAPI 和 SQLite，负责任务、会话和推荐数据的读写，同时为前端提供统一的 API。
-
-## 提供的能力
-
-- 任务管理：创建、查询、更新、归档。
-- 会话记录：开始任务、结束任务、记录耗时和状态。
-- 推荐接口：按当前状态返回更容易开始的任务集合。
-- 健康检查：报告数据库是否可用，以及当前运行模式。
-- AI 拆解占位接口：为前端保留任务拆解能力的接入口。
+Startify 的本地后端，基于 FastAPI + SQLite，负责任务、会话、推荐和智能拆解，并直接提供前端入口。
 
 ## 运行
-
-在当前目录执行：
 
 ```powershell
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-启动后可访问：
+启动后访问：
 
 - `http://127.0.0.1:8000/`
 - `http://127.0.0.1:8000/docs`
 - `http://127.0.0.1:8000/api/health`
 
+## 配置 DeepSeek API
+
+后端通过 DeepSeek 的 OpenAI-compatible Chat Completions API 调用 `deepseek-v4-flash`。本地运行时设置：
+
+```powershell
+$env:STARTIFY_LLM_API_KEY="你的 DeepSeek API Key"
+$env:STARTIFY_LLM_BASE_URL="https://api.deepseek.com"
+$env:STARTIFY_LLM_MODEL="deepseek-v4-flash"
+$env:STARTIFY_LLM_TIMEOUT_SECONDS="30"
+```
+
+当前代码已经把 Base URL 和模型设为上述默认值，因此实际必填项只有 `STARTIFY_LLM_API_KEY`。任务拆解采用非思考模式和 JSON 输出，优先保证响应速度与结构稳定性。
+
+配置完整时，`POST /api/ai/breakdown` 调用真实模型并返回 `source=api:<model>`。没有配置时返回透明标注的 `source=mock` 规则结果，便于本地联调。
+
+真实 API Key 只能保存在本机或部署平台环境变量中，不要写入 `.env.example`、源码或 Git 历史。旧模型名 `deepseek-chat` 将于 2026-07-24 停用，本项目直接使用 `deepseek-v4-flash`。
+
 ## 数据库行为
 
 - 默认使用 `backend/data/startify.db`。
-- 如果文件型 SQLite 初始化失败，会自动回退到内存数据库模式。
-- `GET /api/health` 返回中的 `databaseMode` 可用于判断当前实际运行模式。
+- 文件型 SQLite 初始化失败时回退到内存数据库。
+- `GET /api/health` 通过 `databaseMode` 报告数据库模式，通过 `aiMode` 报告 `api` 或 `mock`。
 
 ## 测试
 
 ```powershell
-python -m unittest
+python -m unittest -v
 ```
 
-测试覆盖健康检查、种子任务、任务 CRUD，以及会话完成后的任务计数更新。
+测试覆盖健康检查、种子任务、任务 CRUD、推荐、会话计数、mock 拆解和模型供应商返回解析。
