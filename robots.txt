@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://zhe6327-wq.github.io/Startify/sitemap.xml
+Sitemap: https://shimmering-cajeta-2233c2.netlify.app/sitemap.xml

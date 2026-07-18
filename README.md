@@ -1,85 +1,120 @@
 # Startify
 
-Startify 是一个本地优先的任务启动助手原型。它不做完整的项目管理，而是围绕“现在怎么开始”这个问题设计流程：根据当前状态推荐任务、把大任务缩成第一步、开启一个很短的倒计时会话，并记录简单的完成轨迹。
+一个帮助用户跨过“知道该做什么，却迟迟开始不了”这道门槛的任务启动助手。Startify 根据用户当前状态推荐低阻力任务，把模糊目标缩成第一步，并用短时计时推动真实行动。
 
-## 项目定位
+[在线体验](https://shimmering-cajeta-2233c2.netlify.app/) · [查看源码](https://github.com/Ruij-Wang/Startify) · [查看页面截图](#页面展示)
 
-- 前端：原生 HTML / CSS / JavaScript。
-- 后端：FastAPI + SQLite。
-- 运行模式：优先连接本地 API；如果后端不可用，前端会自动回退到浏览器本地存储模式。
-- 使用场景：学习、工作或生活任务的低门槛启动，而不是复杂协作。
+> 在线页面当前可以直接体验任务推荐、计时、清单和创建流程。大模型 API 适配已经加入本地代码，Netlify 需要重新部署并配置服务端环境变量后才会启用真实 AI；未配置时页面会明确显示“浏览器演示”。
+
+## 页面展示
+
+<p align="center">
+  <img src="docs/screenshots/startify-player.png" width="46%" alt="Startify 播放器页，展示当前任务和两分钟启动计时">
+  <img src="docs/screenshots/startify-recommendations.png" width="46%" alt="Startify 状态推荐页，根据当前状态推荐低阻力任务">
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/startify-task-list.png" width="46%" alt="Startify 任务清单页">
+  <img src="docs/screenshots/startify-create.png" width="46%" alt="Startify 创建任务与智能拆解页">
+</p>
+
+## 产品问题
+
+传统任务管理工具擅长记录和规划，启动困难仍然留给用户自己解决。Startify 聚焦行动发生前的几分钟：用户可能焦虑、疲惫、脑子空白，也可能只有十分钟空档。产品先判断当前状态，再给出一个足够小、准备成本足够低的动作。
+
+## 核心体验
+
+1. 用户选择“焦虑、脑子空白、疲惫、只剩十分钟”等当前状态。
+2. 系统按时长、能量需求、准备成本和状态标签推荐更容易开始的任务。
+3. 用户进入播放器，用 2～10 分钟短计时启动行动。
+4. 完成、跳过和会话记录形成轻量反馈，不要求维护复杂项目结构。
+5. 创建大任务时，智能拆解把目标缩成可以立即执行的第一步。
+
+## 核心产品决策
+
+- **聚焦启动**：功能围绕“下一步做什么”和“现在开始”展开，控制任务管理复杂度。
+- **状态驱动推荐**：推荐依据当前心理和时间状态，不只按优先级排序。
+- **本地优先**：没有后端时仍可完整体验，任务和会话保存在当前浏览器。
+- **AI 透明标注**：调用大模型时显示“大模型 API”；API 不可用时回退到规则演示并明确标注。
+- **逐步增强**：静态网页提供最低体验门槛，FastAPI + SQLite 支持持久化，服务端 API 提供真实任务拆解。
+
+## 大模型 API
+
+项目提供两条服务端接入路径，通过 DeepSeek 的 OpenAI-compatible Chat Completions API 调用 `deepseek-v4-flash`：
+
+- `backend/app/services/ai_breakdown.py`：本地或独立部署的 FastAPI 后端。
+- `netlify/functions/ai-breakdown.mjs`：Netlify 在线体验的同源 Serverless Function。
+
+两条路径使用相同环境变量：
+
+```text
+STARTIFY_LLM_API_KEY=your-server-side-key
+STARTIFY_LLM_BASE_URL=https://api.deepseek.com
+STARTIFY_LLM_MODEL=deepseek-v4-flash
+STARTIFY_LLM_TIMEOUT_SECONDS=30
+```
+
+Base URL 和模型已经是代码默认值，部署时实际必填项只有 `STARTIFY_LLM_API_KEY`。API Key 只配置在服务端环境中，前端代码和 GitHub 仓库不保存真实凭证。旧模型名 `deepseek-chat` 将于 2026-07-24 停用，因此这里直接使用当前模型名。
+
+### 在线体验启用真实 AI
+
+1. 把当前仓库重新部署到 Netlify。
+2. 在 Netlify 的 `Project configuration → Environment variables` 中添加 `STARTIFY_LLM_API_KEY`；若界面支持 Scope，确保包含 `Functions`。
+3. 可选添加 `STARTIFY_LLM_BASE_URL=https://api.deepseek.com` 与 `STARTIFY_LLM_MODEL=deepseek-v4-flash`，便于在控制台直观看到供应商配置。
+4. 保存后触发一次新的 Production deploy，让环境变量进入新的 Function 部署。
+5. Netlify 会把 `/api/ai/breakdown` 转发到 Serverless Function。
+6. 页面收到 `source=api:<model>` 时显示“大模型 API”；调用失败时使用带标签的浏览器演示。
 
 ## 当前能力
 
-- 根据用户当前状态推荐更容易启动的任务。
-- 提供“播放器式”当前任务视图和短时倒计时。
-- 支持任务创建、收藏、归档、会话记录和基础统计。
-- 前端可在纯静态模式下独立运行。
-- 后端可持久化任务、会话和推荐逻辑，并在首次启动时写入种子任务。
-- 预留 `AI breakdown` 接口，用于把模糊的大任务拆成可开始的第一步。
+- 四个可操作页面：播放器、状态推荐、任务清单、创建任务。
+- 任务创建、搜索、收藏、归档和设为当前任务。
+- 会话开始、暂停、完成、跳过和基础统计。
+- 规则推荐与浏览器 LocalStorage 独立运行模式。
+- FastAPI 任务、会话、推荐、健康检查和智能拆解接口。
+- SQLite 持久化与文件数据库失败时的内存回退。
+- OpenAI-compatible 大模型 API 适配与 Netlify Function。
 
-## 目录结构
+## 运行
 
-- `index.html`：应用入口页。
-- `frontend/`：前端脚本和样式。
-- `backend/app/`：FastAPI 应用、数据模型、路由和服务。
-- `backend/tests/`：接口测试。
-- `PLAN.md`：历史计划记录。
-- `STATUS.md`：阶段进度记录。
+### 只体验前端
 
-## 运行方式
+直接打开 `index.html`，或使用任意静态文件服务器。后端不可用时会切换到浏览器本地模式。
 
-### 只跑前端
+### 运行完整前后端
 
-直接打开 `index.html`，或用任意静态文件服务器提供当前目录。当前端无法连接 API 时，会自动切到浏览器本地存储模式。
+```powershell
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
 
-### 跑完整前后端
+访问：
 
-1. 进入 `backend/` 目录。
-2. 安装依赖：`pip install -r requirements.txt`
-3. 启动服务：`uvicorn app.main:app --reload`
-4. 打开 `http://127.0.0.1:8000/`
-5. API 文档地址：`http://127.0.0.1:8000/docs`
+- 应用：`http://127.0.0.1:8000/`
+- API 文档：`http://127.0.0.1:8000/docs`
+- 健康检查：`http://127.0.0.1:8000/api/health`
 
 ## 测试
 
-在 `backend/` 目录执行：
-
 ```powershell
-python -m unittest
+cd backend
+python -m unittest -v
 ```
 
-当前测试覆盖：
-
-- 健康检查与种子任务初始化
-- 任务创建、更新、归档
-- 会话完成后对任务计数的回写
-
-## API 概览
-
-- `GET /api/health`
-- `GET /api/tasks`
-- `POST /api/tasks`
-- `PATCH /api/tasks/{task_id}`
-- `DELETE /api/tasks/{task_id}`
-- `GET /api/sessions`
-- `POST /api/sessions`
-- `PATCH /api/sessions/{session_id}/finish`
-- `GET /api/recommendations`
-- `POST /api/ai/breakdown`
+测试覆盖任务 CRUD、种子任务、推荐、会话计数、mock 拆解和已配置模型供应商的返回解析。
 
 ## 当前限制
 
-- `AI breakdown` 仍是原型接口，尚未接入真实模型能力。
-- 数据模型按单用户、本地运行设计，没有权限和协作层。
-- 前端虽然支持无后端运行，但本地模式与后端模式的数据不会自动同步。
+- Netlify 线上站点尚未重新部署本地最新版，真实 AI Function 暂未在公网生效。
+- 在线大模型效果取决于服务端环境变量、供应商可用性和调用额度。
+- 本地模式和后端模式的数据不会自动同步。
+- 当前按单用户原型设计，没有账号、权限和跨设备同步。
 
-## 仓库整理说明
+## 技术实现
 
-以下内容已从版本管理中排除：
-
-- SQLite 数据文件
-- 测试临时数据库
-- 运行日志与截图
-- `tmp/` 调试产物
-- Python 缓存目录
+- Frontend：HTML / CSS / JavaScript
+- Backend：FastAPI / SQLAlchemy / SQLite
+- AI：OpenAI-compatible Chat Completions API
+- Online function：Netlify Functions
+- Tests：Python `unittest` / FastAPI `TestClient`

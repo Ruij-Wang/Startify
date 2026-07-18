@@ -15,4 +15,5 @@ def health_check(request: Request) -> HealthResponse:
         version=settings.version,
         database_ready=True,
         database_mode=request.app.state.database_mode,
+        ai_mode="api" if settings.llm_configured else "mock",
     )

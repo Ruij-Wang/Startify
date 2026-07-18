@@ -176,6 +176,11 @@ function resolveApiBase() {
     return stored.replace(/\/$/, "");
   }
 
+  const configured = document.querySelector('meta[name="startify-api-base"]')?.content?.trim();
+  if (configured) {
+    return configured.replace(/\/$/, "");
+  }
+
   if (window.location.protocol === "http:" || window.location.protocol === "https:") {
     return `${window.location.origin}/api`;
   }
@@ -239,7 +244,8 @@ function createDefaultLocalState() {
       projectName: "Startify Frontend",
       version: "0.4.0-frontend-local",
       databaseReady: true,
-      databaseMode: "browser-local-storage"
+      databaseMode: "browser-local-storage",
+      aiMode: "mock"
     },
     tasks: LOCAL_TASK_TEMPLATES.map((task) => normalizeTask(task)),
     sessions: []
@@ -1013,16 +1019,31 @@ async function runAiBreakdown() {
 
   elements.aiResult.textContent = "正在生成...";
   try {
-    const payload = await requestJSON("/ai/breakdown", {
-      method: "POST",
-      body: JSON.stringify({ goal })
-    });
+    let payload;
+    try {
+      payload = await fetchJSON("/ai/breakdown", {
+        method: "POST",
+        body: JSON.stringify({ goal })
+      });
+    } catch (apiError) {
+      console.warn("AI API unavailable; using the labeled browser demo.", apiError);
+      payload = await handleLocalRequest("/ai/breakdown", {
+        method: "POST",
+        body: JSON.stringify({ goal })
+      });
+    }
     appState.aiSuggestion = payload;
     elements.titleInput.value = payload.suggestionTitle;
     elements.durationInput.value = String(payload.durationMin);
     elements.energyInput.value = String(payload.energyLevel);
     elements.tagsInput.value = "clear-step";
-    elements.aiResult.textContent = `${payload.suggestionTitle} · ${payload.steps?.[0] || ""}`;
+    const source = String(payload.source || "");
+    const sourceLabel = source.startsWith("api:")
+      ? "大模型 API"
+      : source === "mock"
+        ? "规则演示"
+        : "浏览器演示";
+    elements.aiResult.textContent = `${payload.suggestionTitle} · ${payload.steps?.[0] || ""} · ${sourceLabel}`;
   } catch (error) {
     console.error(error);
     elements.aiResult.textContent = "AI 拆解失败。";

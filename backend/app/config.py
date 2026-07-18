@@ -12,6 +12,14 @@ class Settings:
     api_prefix: str
     database_url: str
     db_path: Path
+    llm_api_key: str | None = None
+    llm_base_url: str = "https://api.deepseek.com"
+    llm_model: str = "deepseek-v4-flash"
+    llm_timeout_seconds: float = 30.0
+
+    @property
+    def llm_configured(self) -> bool:
+        return bool(self.llm_api_key and self.llm_base_url and self.llm_model)
 
 
 def get_settings() -> Settings:
@@ -27,8 +35,15 @@ def get_settings() -> Settings:
 
     return Settings(
         project_name="Startify Backend",
-        version="0.1.0",
+        version="0.2.0",
         api_prefix="/api",
         database_url=database_url,
         db_path=db_path,
+        llm_api_key=os.getenv("STARTIFY_LLM_API_KEY"),
+        llm_base_url=os.getenv(
+            "STARTIFY_LLM_BASE_URL",
+            "https://api.deepseek.com",
+        ).rstrip("/"),
+        llm_model=os.getenv("STARTIFY_LLM_MODEL", "deepseek-v4-flash"),
+        llm_timeout_seconds=float(os.getenv("STARTIFY_LLM_TIMEOUT_SECONDS", "30")),
     )
