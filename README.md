@@ -8,15 +8,35 @@
 
 ## 页面展示
 
-<p align="center">
-  <img src="docs/screenshots/startify-player.png" width="46%" alt="Startify 播放器页，展示当前任务和两分钟启动计时">
-  <img src="docs/screenshots/startify-recommendations.png" width="46%" alt="Startify 状态推荐页，根据当前状态推荐低阻力任务">
-</p>
+<table>
+  <tr>
+    <th width="50%">播放器｜聚焦当前任务</th>
+    <th width="50%">状态推荐｜匹配当下状态</th>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/startify-player.png" width="100%" alt="Startify 播放器页，展示当前任务和短时启动计时"></td>
+    <td><img src="docs/screenshots/startify-recommendations.png" width="100%" alt="Startify 状态推荐页，根据当前状态推荐低阻力任务"></td>
+  </tr>
+  <tr>
+    <td align="center">查看任务、时长、能量和计时状态，立即开始行动。</td>
+    <td align="center">选择焦虑、疲惫等状态，获得更容易启动的任务。</td>
+  </tr>
+</table>
 
-<p align="center">
-  <img src="docs/screenshots/startify-task-list.png" width="46%" alt="Startify 任务清单页">
-  <img src="docs/screenshots/startify-create.png" width="46%" alt="Startify 创建任务与智能拆解页">
-</p>
+<table>
+  <tr>
+    <th width="50%">任务清单｜集中管理任务</th>
+    <th width="50%">创建任务｜AI 生成第一步</th>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/startify-task-list.png" width="100%" alt="Startify 任务清单页，展示筛选、收藏、启动和归档操作"></td>
+    <td><img src="docs/screenshots/startify-create.png" width="100%" alt="Startify 创建任务与智能拆解页"></td>
+  </tr>
+  <tr>
+    <td align="center">搜索、筛选、收藏、启动或归档已有任务。</td>
+    <td align="center">填写模糊目标，通过 DeepSeek 生成可立即执行的第一步。</td>
+  </tr>
+</table>
 
 ## 产品问题
 
