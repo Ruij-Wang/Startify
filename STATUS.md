@@ -45,7 +45,7 @@
 ### 本阶段目标
 
 - 把 README 调整为产品问题和体验入口优先的展示结构
-- 统一正式在线入口为 `https://shimmering-cajeta-2233c2.netlify.app/`
+- 统一正式在线入口为 `https://luxury-flan-6ad34b.netlify.app/`
 - 移除朋友 GitHub Pages 账号的正式展示链接
 - 给 FastAPI 和 Netlify 在线体验补齐服务端大模型 API 适配
 - 输出可直接放入 README 的真实页面截图

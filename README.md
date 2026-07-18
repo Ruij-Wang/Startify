@@ -2,9 +2,9 @@
 
 一个帮助用户跨过“知道该做什么，却迟迟开始不了”这道门槛的任务启动助手。Startify 根据用户当前状态推荐低阻力任务，把模糊目标缩成第一步，并用短时计时推动真实行动。
 
-[在线体验](https://shimmering-cajeta-2233c2.netlify.app/) · [查看源码](https://github.com/Ruij-Wang/Startify) · [查看页面截图](#页面展示)
+[在线体验](https://luxury-flan-6ad34b.netlify.app/) · [查看源码](https://github.com/Ruij-Wang/Startify) · [查看页面截图](#页面展示)
 
-> 在线页面当前可以直接体验任务推荐、计时、清单和创建流程。大模型 API 适配已经加入本地代码，Netlify 需要重新部署并配置服务端环境变量后才会启用真实 AI；未配置时页面会明确显示“浏览器演示”。
+> 在线页面当前可以直接体验任务推荐、计时、清单和创建流程。创建任务时可通过 Netlify Function 调用 DeepSeek 生成第一步；服务不可用时页面会回退到本地规则演示并明确标注。
 
 ## 页面展示
 

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://shimmering-cajeta-2233c2.netlify.app/sitemap.xml
+Sitemap: https://luxury-flan-6ad34b.netlify.app/sitemap.xml

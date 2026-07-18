@@ -11,3 +11,6 @@ backend/data/*.sqlite
 backend/data/*.txt
 backend/tests/.tmp/
 tmp/
+
+# Local Netlify folder
+.netlify
