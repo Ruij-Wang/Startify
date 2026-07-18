@@ -58,33 +58,6 @@
 - **AI 透明标注**：调用大模型时显示“大模型 API”；API 不可用时回退到规则演示并明确标注。
 - **逐步增强**：静态网页提供最低体验门槛，FastAPI + SQLite 支持持久化，服务端 API 提供真实任务拆解。
 
-## 大模型 API
-
-项目提供两条服务端接入路径，通过 DeepSeek 的 OpenAI-compatible Chat Completions API 调用 `deepseek-v4-flash`：
-
-- `backend/app/services/ai_breakdown.py`：本地或独立部署的 FastAPI 后端。
-- `netlify/functions/ai-breakdown.mjs`：Netlify 在线体验的同源 Serverless Function。
-
-两条路径使用相同环境变量：
-
-```text
-STARTIFY_LLM_API_KEY=your-server-side-key
-STARTIFY_LLM_BASE_URL=https://api.deepseek.com
-STARTIFY_LLM_MODEL=deepseek-v4-flash
-STARTIFY_LLM_TIMEOUT_SECONDS=30
-```
-
-Base URL 和模型已经是代码默认值，部署时实际必填项只有 `STARTIFY_LLM_API_KEY`。API Key 只配置在服务端环境中，前端代码和 GitHub 仓库不保存真实凭证。旧模型名 `deepseek-chat` 将于 2026-07-24 停用，因此这里直接使用当前模型名。
-
-### 在线体验启用真实 AI
-
-1. 把当前仓库重新部署到 Netlify。
-2. 在 Netlify 的 `Project configuration → Environment variables` 中添加 `STARTIFY_LLM_API_KEY`；若界面支持 Scope，确保包含 `Functions`。
-3. 可选添加 `STARTIFY_LLM_BASE_URL=https://api.deepseek.com` 与 `STARTIFY_LLM_MODEL=deepseek-v4-flash`，便于在控制台直观看到供应商配置。
-4. 保存后触发一次新的 Production deploy，让环境变量进入新的 Function 部署。
-5. Netlify 会把 `/api/ai/breakdown` 转发到 Serverless Function。
-6. 页面收到 `source=api:<model>` 时显示“大模型 API”；调用失败时使用带标签的浏览器演示。
-
 ## 当前能力
 
 - 四个可操作页面：播放器、状态推荐、任务清单、创建任务。
